@@ -1,5 +1,6 @@
 import os, sys, time, shutil, tempfile, datetime, pathlib, subprocess
 import logging
+from tkinter import N
 import numpy as np
 from tqdm import trange, tqdm
 from urllib.parse import urlparse
@@ -59,14 +60,30 @@ def _use_gpu_torch(gpu_number=0):
         core_logger.info('** TORCH CUDA version installed and working. **')
         return True
     except:
-        core_logger.info('TORCH CUDA version not installed/working.')
+        pass
+    try:
+        device = torch.device('mps:' + str(gpu_number))
+        _ = torch.zeros([1, 2, 3]).to(device)
+        core_logger.info('** TORCH MPS version installed and working. **')
+        return True
+    except:
+        core_logger.info('Neither TORCH CUDA nor MPS version not installed/working.')
         return False
 
 def assign_device(use_torch=True, gpu=False, device=0):
     if gpu and use_gpu(use_torch=True):
-        device = torch.device(f'cuda:{device}')
-        gpu=True
-        core_logger.info('>>>> using GPU')
+        try:
+            if torch.cuda.is_available():
+                device = torch.device(f'cuda:{device}')
+            gpu=True
+        except Exception as e:
+            pass
+        try:
+            if torch.backends.mps.is_available():
+                device = torch.device(f'mps:{device}')
+            gpu = True
+        except:
+            pass
     else:
         device = torch.device('cpu')
         core_logger.info('>>>> using CPU')
@@ -95,9 +112,7 @@ class UnetModel():
         if device is None:
             sdevice, gpu = assign_device(self.torch, gpu)
         self.device = device if device is not None else sdevice
-        if device is not None:
-            device_gpu = self.device.type=='cuda'
-        self.gpu = gpu if device is None else device_gpu
+        self.gpu = gpu
         if not self.gpu:
             self.mkldnn = check_mkl(True)
         self.pretrained_model = pretrained_model

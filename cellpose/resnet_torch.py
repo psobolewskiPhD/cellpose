@@ -219,7 +219,7 @@ class CPnet(nn.Module):
 
     def load_model(self, filename, cpu=False):
         if not cpu:
-            state_dict = torch.load(filename)
+            state_dict = torch.load(filename, map_location=torch.device('mps'))
         else:
             self.__init__(self.nbase,
                           self.nout,

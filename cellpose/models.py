@@ -78,7 +78,8 @@ class Cellpose():
         self.torch = True
         
         # assign device (GPU or CPU)
-        sdevice, gpu = assign_device(self.torch, gpu)
+        if device is None:
+            sdevice, gpu = assign_device(self.torch, gpu)
         self.device = device if device is not None else sdevice
         self.gpu = gpu
         

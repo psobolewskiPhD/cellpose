@@ -107,7 +107,7 @@ def distance_to_boundary(masks):
     """
     if masks.ndim > 3 or masks.ndim < 2:
         raise ValueError('distance_to_boundary takes 2D or 3D array, not %dD array'%masks.ndim)
-    dist_to_bound = np.zeros(masks.shape, np.float64)
+    dist_to_bound = np.zeros(masks.shape, np.float32)
     
     if masks.ndim==3:
         for i in range(masks.shape[0]):
