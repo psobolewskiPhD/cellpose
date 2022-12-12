@@ -1,4 +1,3 @@
-import PyQt5
 from PyQt5.QtWidgets import QAction
 from . import io
 from .. import models

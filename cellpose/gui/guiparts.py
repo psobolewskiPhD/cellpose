@@ -1,4 +1,3 @@
-import PyQt5
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtGui import QPainter, QPixmap
 from PyQt5.QtWidgets import QApplication, QRadioButton, QWidget, QDialog, QButtonGroup, QSlider, QStyle, QStyleOptionSlider, QGridLayout, QPushButton, QLabel, QLineEdit, QDialogButtonBox, QComboBox, QCheckBox
@@ -45,7 +44,7 @@ class ModelButton(QPushButton):
 class TrainWindow(QDialog):
     def __init__(self, parent, model_strings):
         super().__init__(parent)
-        self.setGeometry(100,100,900,350)
+        self.setGeometry(100,100,600,300)
         self.setWindowTitle('train settings')
         self.win = QWidget(self)
         self.l0 = QGridLayout()
@@ -89,17 +88,16 @@ class TrainWindow(QDialog):
             self.l0.addWidget(qlabel, i+yoff,0,1,1)
             self.edits.append(QLineEdit())
             self.edits[-1].setText(str(parent.training_params[label]))
-            self.edits[-1].setFixedWidth(200)
             self.l0.addWidget(self.edits[-1], i+yoff, 1,1,1)
 
         yoff+=len(labels)
 
         yoff+=1
-        qlabel = QLabel('(to remove files, click cancel then remove \nfrom folder and reopen train window)')
-        self.l0.addWidget(qlabel, yoff,0,2,4)
+        qlabel = QLabel('(to remove files, click cancel then remove from folder and reopen train window)')
+        self.l0.addWidget(qlabel, yoff,0,1,4)
 
         # click button
-        yoff+=2
+        yoff+=1
         QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         self.buttonBox = QDialogButtonBox(QBtn)
         self.buttonBox.accepted.connect(lambda: self.accept(parent))
@@ -438,7 +436,7 @@ class RGBRadioButtons(QButtonGroup):
                 button.setChecked(True)
             self.addButton(button, b)
             button.toggled.connect(lambda: self.btnpress(parent))
-            self.parent.l0.addWidget(button, row,col+2*b,1,2)
+            self.parent.l0.addWidget(button, row+b,col,1,3)
         self.setExclusive(True)
         #self.buttons.
 
@@ -582,7 +580,7 @@ class ImageDraw(pg.ImageItem):
         return
 
     def hoverEvent(self, ev):
-        #QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.CrossCursor)
+        QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.CrossCursor)
         if self.parent.in_stroke:
             if self.parent.in_stroke:
                 # continue stroke if not at start
@@ -727,12 +725,12 @@ class RangeSlider(QSlider):
         self.setStyleSheet(\
                 "QSlider::handle:horizontal {\
                 background-color: white;\
-                border: 1px solid white;\
-                border-radius: 2px;\
-                border-color: white;\
+                border: 1px solid #5c5c5c;\
+                border-radius: 0px;\
+                border-color: black;\
                 height: 8px;\
                 width: 6px;\
-                margin: 0px 2; \
+                margin: -8px 2; \
                 }")
 
 
