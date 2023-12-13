@@ -22,9 +22,9 @@ def get_arg_parser():
 
     # settings for CPU vs GPU
     hardware_args = parser.add_argument_group("Hardware Arguments")
-    hardware_args.add_argument('--use_gpu', action='store_true', help='use gpu if torch with cuda installed')
-    hardware_args.add_argument('--gpu_device', required=False, default='0', type=str,
-                               help='which gpu device to use, use an integer for torch, or mps for M1')
+    hardware_args.add_argument('--use_gpu', action='store_true', help='use gpu if torch with cuda or MPS installed')
+    hardware_args.add_argument('--gpu_device', required=False, default='0', type=int,
+                               help='which gpu device to use, use an integer for torch device')
     hardware_args.add_argument('--check_mkl', action='store_true', help='check if mkl working')
 
     # settings for locating and formatting images
